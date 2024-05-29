@@ -8,7 +8,7 @@ class Value:
         self._prev = set(_children)
         self._op = _op
         self.label = label
-    
+
     def _value(self, other):
         return other if isinstance(other, Value) else Value(other)
 
@@ -29,7 +29,7 @@ class Value:
             other.grad += self.data * out.grad
         out._backward = _backward
         return out
-    
+
     def __pow__(self, other):
         assert isinstance(other, (int, float)), "Support only int/float power"
         out = Value(self.data**other, (self, ), f'**{other}')
@@ -43,16 +43,16 @@ class Value:
 
     def __sub__(self, other):
         return self + (-other)
-    
+
     def __rsub__(self, other):
         return other + (-self)
-    
+
     def __truediv__(self, other):
         return self * (other**-1)
-    
+
     def __rtruediv__(self, other):
         return other * (self**-1)
-    
+
     def exp(self):
         e = math.exp(round(self.data, 4))
         out = Value(e, (self, ), 'exp')
@@ -91,8 +91,7 @@ class Value:
         self.grad = 1.0
         for child in reversed(topo):
             child._backward()
-        
-    
+
     def __repr__(self):
         return f"Value(data={self.data}, bias={self.grad})"
     
